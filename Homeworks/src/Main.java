@@ -1,32 +1,72 @@
-
-
-import java.util.LinkedList;
+/*Подумать над структурой класса Ноутбук для магазина техники - выделить поля и методы. Реализовать в java.
+Создать множество ноутбуков.
+Написать метод, который будет запрашивать у пользователя критерий (или критерии) фильтрации и выведет ноутбуки, отвечающие фильтру. Критерии фильтрации можно хранить в Map. Например:
+“Введите цифру, соответствующую необходимому критерию:
+1 - ОЗУ
+2 - Объем ЖД
+3 - Операционная система
+4 - Цвет …
+Далее нужно запросить минимальные значения для указанных критериев - сохранить параметры фильтрации можно также в Map.
+Отфильтровать ноутбуки их первоначального множества и вывести проходящие по условиям.*/
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        //Task1. Реализуйте структуру телефонной книги с помощью HashMap, учитывая, что 1 человек может иметь несколько телефонов.
-        Phone phone = new Phone();
-        phone.add("1321321312", "Jack");
-        phone.add("1321321311", "Jack");
-        phone.add("1322222112", "Jane");
-        phone.add("111111111111", "John");
-        phone.add("12221333", "James");
-        phone.search("Jack");
-        phone.print();
+        HashSet<Notebook> notebooks = new HashSet<>();
+        notebooks.add(new Notebook(0, 250, 16, 14, "Windows10", "black", "Asus"));
+        notebooks.add(new Notebook(1, 250, 32, 14, "Windows11", "black", "Asus"));
+        notebooks.add(new Notebook(2, 250, 64, 14, "Windows11", "silver", "Asus"));
+        notebooks.add(new Notebook(3, 500, 16, 15, "Dos", "black", "Lenovo"));
+        notebooks.add(new Notebook(4, 750, 16, 16, "None", "blue", "Acer"));
+        notebooks.add(new Notebook(5, 1000, 32, 15, "Windows11", "red", "Sony"));
+        notebooks.add(new Notebook(6, 750, 32, 15, "Windows11", "red", "Xiaomi"));
+        notebooks.add(new Notebook(7, 750, 64, 15, "Windows11", "white", "Acer"));
+        notebooks.add(new Notebook(8, 750, 32, 15, "Windows11", "silver", "Sony"));
+        Filter(userRequest(), notebooks);
 
-     /*Task2. Пусть дан список сотрудников:Иван Иванов, Светлана Петрова, Кристина Белова, Анна Мусина, Анна Крутова,
-     Иван Юрин, Петр Лыков, Павел Чернов, Петр Чернышов, Мария Федорова, Марина Светлова, Мария Савина, Мария Рыкова,
-     Марина Лугова, Анна Владимирова, Иван Мечников, Петр Петин, Иван Ежов. Написать программу, которая найдет и выведет
-     повторяющиеся имена с количеством повторений. Отсортировать по убыванию популярности.
-     */
-        String [] employees = new String[]{"Иван Иванов", "Светлана Петрова", "Кристина Белова",
-                "Анна Мусина", "Анна Крутова", "Иван Юрин", "Петр Лыков",
-                "Павел Чернов", "Петр Чернышов", "Мария Федорова",
-                "Марина Светлова", "Мария Савина", "Мария Рыкова",
-                "Марина Лугова", "Анна Владимирова", "Иван Мечников",
-                "Петр Петин", "Иван Ежов"};
-        var names = HW05.task2(employees);
-        System.out.println(names);
-        System.out.println(HW05.sortedTask2(names));
+    }
+
+    public static HashMap<String, String> userRequest() {
+        HashMap<String, String> userRequest = new HashMap<>();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите параметры для поиска. Параметры, которые не участвуют в поиске,оставьте пустыми:");
+        System.out.print("Введите тип ОС:");
+        userRequest.put("os_type", scanner.nextLine());
+        System.out.print("Введите цвет корпуса:");
+        userRequest.put("color", scanner.nextLine());
+        System.out.print("Введите производителя:");
+        userRequest.put("brand", scanner.nextLine());
+        System.out.print("Введите минимальный объем жесткого диска:");
+        userRequest.put("hdd_volume", scanner.nextLine());
+        System.out.print("Введите минимальный объем оперативной памяти:");
+        userRequest.put("ram_volume", scanner.nextLine());
+        System.out.print("Введите минимальную диагональ дисплея:");
+        userRequest.put("display_size", scanner.nextLine());
+        scanner.close();
+        return userRequest;
+    }
+
+    public static void Filter(HashMap<String, String> userRequest, HashSet<Notebook> catalog) {
+        Boolean noResultsFlag=true;
+        for (Notebook nb : catalog) {
+            if (userRequest.get("brand").equals(nb.getBrand()) || userRequest.get("brand") == "") {
+                if (userRequest.get("color").equals(nb.getBrand()) || userRequest.get("color") == "") {
+                    if (userRequest.get("os_type").equals(nb.getBrand()) || userRequest.get("os_type") == "") {
+                        if (nb.getDisplSize() >= Integer.parseInt(userRequest.get("display_size")) &&
+                                (nb.getHDDvolume() >= Integer.parseInt(userRequest.get("hdd_volume"))) &&
+                                (nb.getRAMvolume() >= Integer.parseInt(userRequest.get("ram_volume")))) {
+                            System.out.println(nb);
+                            noResultsFlag=false;
+                        }
+                    }
+                }
+            }
+
+        }
+        if (noResultsFlag){
+            System.out.println("По вашему запросу ничего не найдено.");
+        }
     }
 }
