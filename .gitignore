@@ -1,0 +1,9 @@
+
+*.xml
+*.iml
+*.class
+log.txt
+Task1.txt
+Homeworks/.idea/.name
+Homeworks/src/out/production/Homeworks/.idea/.name
+Homeworks/src/.idea/.name
